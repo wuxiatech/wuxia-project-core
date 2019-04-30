@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/cache  http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+	<description>EhCache Configeration</description>
+
+	<!-- spring对ehcache的缓存工厂支持 -->
+	<bean id="ehcacheManagerFactory"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:/${ehcache.configuration.file}" />
+		<!-- <property name="shared" value="true" /> -->
+	</bean>
+
+	<!-- spring对ehcache的缓存管理 -->
+	<bean id="ehcacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcacheManagerFactory"></property>
+	</bean>
+
+	<!-- 使用缓存annotation 配置 -->
+	<cache:annotation-driven cache-manager="ehcacheManager" />
+
+	<!-- <bean id="springCacheManager" class="org.springframework.cache.support.SimpleCacheManager"> 
+		<property name="caches"> <set> <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" 
+		name="default" /> <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" 
+		name="dicBaseData" /> <bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" 
+		name="myServices" /> </set> </property> </bean> <cache:annotation-driven 
+		cache-manager="springCacheManager" /> -->
+</beans>

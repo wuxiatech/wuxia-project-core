@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
+	default-lazy-init="true">
+
+	<bean id="menu-query" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- if SQL, end with _sql -->
+				<!-- if HQL, end with _hql -->
+				<entry key="findBySystem_sql">
+					<value>
+					<![CDATA[
+						SELECT
+							m.id menuId,
+							m. CODE menuCode,
+							m.`NAME` name,
+							m.TYPE type,
+							m.EVENT_KEY eventKey,
+							m.URL url,
+							r.id refId,
+							r.PARENT_MENU_ID parentId,
+							r.SORT_ORDER sortOrder
+						FROM
+							sys_menu m,
+							sys_menu_platform_ref r
+						WHERE
+							m.ID = r.MENU_ID
+						AND SYSTEM_PLATFORM = ?
+						AND r.PARENT_MENU_ID IS NULL
+						AND m.is_obsolete_date IS NULL
+						AND r.is_obsolete_date IS NULL
+						ORDER BY
+							r.SORT_ORDER
+					]]>
+					</value>
+				</entry>
+				<entry key="findByParentId_sql">
+					<value>
+						<![CDATA[
+						SELECT
+							m.id menuId,
+							m. CODE menuCode,
+							m.`NAME` name,
+							m.TYPE type,
+							m.EVENT_KEY eventKey,
+							m.URL url,
+							r.id refId,
+							r.PARENT_MENU_ID parentId,
+							r.SORT_ORDER sortOrder
+						FROM
+							sys_menu m,
+							sys_menu_platform_ref r
+						WHERE
+							m.ID = r.MENU_ID
+						AND r.PARENT_MENU_ID = ?
+						AND m.is_obsolete_date IS NULL
+						AND r.is_obsolete_date IS NULL
+						ORDER BY
+							r.SORT_ORDER
+					]]>
+					</value>
+				</entry>
+				<entry key="findByParentCode_sql">
+					<value>
+						<![CDATA[
+						SELECT
+							m.id menuId,
+							m. CODE menuCode,
+							m.`NAME` name,
+							m.TYPE type,
+							m.EVENT_KEY eventKey,
+							m.URL url,
+							r.id refId,
+							r.PARENT_MENU_ID parentId,
+							r.SORT_ORDER sortOrder
+						FROM
+							sys_menu m,
+							sys_menu_platform_ref r,
+							sys_menu pm
+						WHERE
+							m.ID = r.MENU_ID
+						AND r.PARENT_MENU_ID = pm.ID
+						AND pm.code = ?
+						AND m.is_obsolete_date IS NULL
+						AND r.is_obsolete_date IS NULL
+						AND pm.is_obsolete_date IS NULL
+						ORDER BY
+							r.SORT_ORDER
+					]]>
+					</value>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

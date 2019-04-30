@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<jmxConfigurator />
+	<property resource="logback.config.properties" />
+	<property name="LOG_HOME" value="${log.home}" />
+	<property name="LOG_FILE_NAME" value="${log.filename}" />
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d %-5p %-40.40c No.%L -%m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="rollingFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/${LOG_FILE_NAME}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+			<maxHistory>10</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d %-5p %c No.%L -%m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="errorLogFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/${LOG_FILE_NAME}.error.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/${LOG_FILE_NAME}.error.%d{yyyy-MM-dd}.log
+			</fileNamePattern>
+		</rollingPolicy>
+		<!-- 独立的pattern -->
+		<encoder>
+			<pattern>%d %-5p %c No.%L -%m%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+	</appender>
+
+	<!-- project default level -->
+	<logger name="cn.wuxia.epay" level="INFO"  />
+	<logger name="cn.wuxia.common" level="INFO"  />
+	<logger name="cn.wuxia.weixin" level="INFO"  />
+	<logger name="cn.wuxia.project" level="INFO"  />
+	<logger name="org.springframework" level="INFO"  />
+	<logger name="org.hibernate" level="INFO"  />
+	<logger name="net.sf.ehcache" level="WARN"  />
+	<logger name="org.quartz" level="INFO"  />
+	<logger name="com.mongodb" level="INFO"  />
+	<logger name="org.springframework.data" level="INFO"  />
+	<!--log4jdbc -->
+	<logger name="jdbc.sqlonly" level="WARN"  />
+	<logger name="jdbc.sqltiming" level="INFO"  />
+	<logger name="jdbc.resultsettable" level="INFO"  />
+	<logger name="jdbc.resultset" level="WARN"  />
+	<logger name="jdbc.connection" level="WARN"  />
+	<logger name="jdbc.audit" level="WARN"  />
+
+	<root level="INFO">
+		<appender-ref ref="console" />
+		<appender-ref ref="rollingFile" />
+		<appender-ref ref="errorLogFile" />
+	</root>
+
+
+</configuration>

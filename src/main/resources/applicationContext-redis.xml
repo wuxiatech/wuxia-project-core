@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+	<!-- 启用缓存注解功能，这个是必须的，否则注解不会生效，另外，该注解一定要声明在spring主配置文件中才会生效 -->
+	<!-- mode="aspectj" <context:load-time-weaver/> -->
+	<cache:annotation-driven cache-manager="cacheManager" />
+	<!-- spring自己的换管理器，这里定义了两个缓存位置名称 ，既注解中的value -->
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+				<bean class="cn.wuxia.common.spring.cache.CacheImpl">
+					<property name="cacheClient" ref="redisTemplate" />
+					<!-- 由于CacheSupport中定义了默认为baseData，故设为baseData,也可设为其他值 -->
+					<property name="cacheName" value="1HourData" />
+					<!-- 缓存定义有效期为1小时 -->
+					<property name="expiredTime" value="3600" />
+				</bean>
+				<bean class="cn.wuxia.common.spring.cache.CacheImpl">
+					<property name="cacheClient" ref="redisTemplate" />
+					<!-- 定义了一个长时间的缓存2HourData -->
+					<property name="cacheName" value="2HourData" />
+					<!-- 缓存定义有效期为2小时 -->
+					<property name="expiredTime" value="7200" />
+				</bean>
+				<bean class="cn.wuxia.common.spring.cache.CacheImpl">
+					<property name="cacheClient" ref="redisTemplate" />
+					<!-- 定义了一个长时间的缓存4HourData -->
+					<property name="cacheName" value="4HourData" />
+					<!-- 缓存定义有效期为4小时 -->
+					<property name="expiredTime" value="14400" />
+				</bean>
+				<bean class="cn.wuxia.common.spring.cache.CacheImpl">
+					<property name="cacheClient" ref="redisTemplate" />
+					<!-- 定义了一个长时间的缓存1DayData -->
+					<property name="cacheName" value="1DayData" />
+					<!-- 缓存定义有效期为1天 -->
+					<property name="expiredTime" value="86400" />
+				</bean>
+			</set>
+		</property>
+	</bean>
+
+	<!-- redis 相关配置 -->
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		<property name="maxWaitMillis" value="${redis.maxWait}" />
+		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
+	</bean>
+
+	<bean id="standaloneConfig"
+		class="org.springframework.data.redis.connection.RedisStandaloneConfiguration">
+		<property name="hostName" value="${redis.host}" />
+		<property name="port" value="${redis.port}" />
+	</bean>
+	<bean id="connectionFactory"
+		  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<constructor-arg name="standaloneConfig" ref="standaloneConfig" />
+		<property name="poolConfig" ref="poolConfig" />
+	</bean>
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="keySerializer" ref="stringRedisSerializer" />
+		<property name="hashKeySerializer" ref="stringRedisSerializer" />
+		<property name="hashValueSerializer" ref="stringRedisSerializer" />
+	</bean>
+
+	<bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+
+	<bean id="stringRedisSerializer"
+		class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+</beans>

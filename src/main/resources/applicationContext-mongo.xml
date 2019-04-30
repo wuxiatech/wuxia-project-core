@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+
+    <bean id="secondaryPreferredReadPreference"
+          class="com.mongodb.TaggableReadPreference.SecondaryPreferredReadPreference"></bean>
+
+    <mongo:mongo-client id="baseMongoClient" replica-set="${mongo.replicaSet.address}"
+                        credentials="${base.mongo.username}:${base.mongo.password}@${base.db.dbName}">
+        <mongo:client-options write-concern="SAFE" connect-timeout="1000" socket-timeout="10000"
+                              max-wait-time="1000" socket-keep-alive="true" connections-per-host="5"
+                              threads-allowed-to-block-for-connection-multiplier="3"
+                              read-preference="SECONDARY_PREFERRED"  />
+    </mongo:mongo-client>
+    <!--<mongo:mongo-client id="baseMongoClient" host="${base.db.host}" port="${base.db.port}"-->
+    <!--credentials="${base.mongo.username}:${base.mongo.password}@${base.db.dbName}">-->
+    <!--<mongo:client-options write-concern="SAFE" connect-timeout="1000" socket-timeout="10000"-->
+    <!--max-wait-time="1000" socket-keep-alive="true" connections-per-host="5"-->
+    <!--threads-allowed-to-block-for-connection-multiplier="3"/>-->
+    <!--</mongo:mongo-client>-->
+    <mongo:db-factory id="baseMongoDbFactory" dbname="${base.db.dbName}" mongo-ref="baseMongoClient"  />
+
+    <!-- 自动扫描以下包的类 -->
+    <!-- <mongo:mapping-converter base-package="com.zuji.nfyy.api.**.entity" /> -->
+
+    <!-- 配置mongodb映射类型 -->
+    <bean id="baseMappingMongoConverter" class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
+        <constructor-arg name="mongoDbFactory" ref="baseMongoDbFactory"/>
+        <constructor-arg name="mappingContext">
+            <bean class="org.springframework.data.mongodb.core.mapping.MongoMappingContext"/>
+        </constructor-arg>
+
+        <property name="typeMapper">
+            <!-- 默认Mongodb类型映射 -->
+            <bean class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">
+                <constructor-arg name="typeKey">
+                    <null/> <!-- 这里设置为空,可以把 spring data mongodb 多余保存的_class字段去掉 -->
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
+
+
+    <!-- 操作mongodb -->
+    <bean id="baseMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="baseMongoDbFactory"/>
+        <constructor-arg name="mongoConverter" ref="baseMappingMongoConverter"/>
+    </bean>
+
+    <mongo:repositories base-package="cn.wuxia.project.basic.core,cn.wuxia.project.ws.wechat"
+                        mongo-template-ref="baseMongoTemplate"></mongo:repositories>
+</beans>

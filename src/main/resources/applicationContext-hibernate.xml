@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-lazy-init="true">
+
+
+    <!-- 数据源配置,使用应用内的jndi数据库连接池 -->
+    <bean id="baseDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName">
+            <value>java:comp/env/jdbc/${db.admin.environment:base}DataSource</value>
+        </property>
+    </bean>
+
+
+    <bean id="baseSessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="baseDataSource"></property>
+        <property name="jtaTransactionManager" ref="jtaTransactionManager"/>
+        <!--<property name="namingStrategy"> <bean class="org.hibernate.cfg.ImprovedNamingStrategy" /> </property> -->
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.dialect.storage_engine">${hibernate.dialect.storage_engine}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+                <prop key="hibernate.auto_quote_keyword">true</prop>
+                <prop key="hibernate.use_sql_comments">${hibernate.use_sql_comments}</prop>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+                <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
+                <prop key="hibernate.jdbc.fetch_size">${hibernate.jdbc.fetch_size}</prop>
+                <prop key="hibernate.transaction.coordinator_class">${hibernate.transaction.coordinator_class}</prop>
+                <!--spring自动配置jtaplatfom,但是jpa需要自己配置-->
+                <!--<prop key="hibernate.transaction.jta.platform" >.support.AtomikosJtaPlatfom</prop>-->
+                <prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+                <prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.SingletonEhCacheRegionFactory
+                </prop>
+                <prop key="net.sf.ehcache.configurationResourceName">ehcache/ehcache-hibernate.xml</prop>
+                <prop key="hibernate.cache.use_structured_entries">true</prop>
+            </props>
+        </property>
+        <property name="packagesToScan">
+            <list>
+                <value>cn.wuxia.project</value>
+                <value>${hibernate.packages.scan}</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>

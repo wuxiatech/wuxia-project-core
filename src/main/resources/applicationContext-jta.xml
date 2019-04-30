@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-lazy-init="true">
+
+    <!--配置事务管理器的内部内容-->
+    <bean id="userTransactionService"
+          class="com.atomikos.icatch.config.UserTransactionServiceImp"
+          init-method="init" destroy-method="shutdownForce">
+        <constructor-arg>
+            <!-- IMPORTANT: specify all Atomikos properties here -->
+            <props>
+                <prop key="com.atomikos.icatch.service">
+                    com.atomikos.icatch.standalone.UserTransactionServiceFactory
+                </prop>
+                <prop key="com.atomikos.icatch.max_actives">1000</prop>
+                <prop key="com.atomikos.icatch.max_timeout">60000</prop>
+            </props>
+        </constructor-arg>
+    </bean>
+    <!--分布式事务 -->
+    <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager" init-method="init"
+          destroy-method="close" depends-on="userTransactionService">
+        <property name="forceShutdown" value="true"/>
+    </bean>
+
+    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp">
+        <property name="transactionTimeout" value="30000"/>
+    </bean>
+
+    <bean id="jtaTransactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+        <property name="transactionManager" ref="atomikosTransactionManager"/>
+        <property name="userTransaction" ref="atomikosUserTransaction"/>
+        <property name="allowCustomIsolationLevels" value="true"/>
+    </bean>
+    <!--编程式事务模板 -->
+    <bean id="tansactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="jtaTransactionManager"/>
+    </bean>
+
+    <!--该bean的作用是将spring中配置的tranactionManager,usertransaction注入到AtomikosJtaPlatfom中的一个静态域中,实现spring事务管理器与hibernate的事务管理器一致!!!! -->
+    <bean id="atomikosJtaPlatfom" class="cn.wuxia.project.common.support.AtomikosJtaPlatfom">
+    <property name="tm" ref="atomikosTransactionManager" />
+    <property name="ut" ref="atomikosUserTransaction" />
+    </bean>
+
+
+    <tx:advice id="txAdvice" transaction-manager="jtaTransactionManager">
+        <tx:attributes>
+            <tx:method name="*" isolation="DEFAULT" propagation="REQUIRED"/>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="query*" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- support @Transactional -->
+    <tx:annotation-driven transaction-manager="jtaTransactionManager" proxy-target-class="true"/>
+    <!-- define the aspectj -->
+    <!-- Configuration of the affairs of the propagation characteristic -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <bean id="logAspect" class="cn.wuxia.project.common.support.CustomLogAspect" lazy-init="false"/>
+    <!-- define which method will be involved in the transaction -->
+    <aop:config expose-proxy="true">
+        <aop:advisor pointcut="execution(* cn.funmeet..service.*.*(..)) || execution(* cn.wuxia.project..service.*.*(..))" advice-ref="txAdvice"/>
+        <!--<aop:advisor -->
+        <!--pointcut="execution(* .core.*.service.*.*(..))" -->
+        <!--advice-ref="baseTxAdvice"/> -->
+        <aop:aspect ref="logAspect">
+            <aop:around pointcut="execution(* cn.funmeet..*.service.*.*(..)) || execution(* cn.wuxia.project..service.*.*(..))" method="invoke"/>
+        </aop:aspect>
+    </aop:config>
+    <!-- 某些地方直接使用transactionManager -->
+    <alias name="jtaTransactionManager" alias="transactionManager" />
+</beans>

@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc" xmlns:mvc="http://www.springframework.org/schema/mvc"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+    <context:component-scan base-package="cn.wuxia.project" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+    </context:component-scan>
+
+    <mvc:resources mapping="/resources/**" location="/resources/">
+        <cache-control cache-public="true" max-age="3600"/>
+    </mvc:resources>
+    <mvc:resources mapping="/commons/**" location="classpath:/META-INF/resources/commons/">
+        <cache-control cache-public="true" max-age="3600"/>
+    </mvc:resources>
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/">
+        <cache-control cache-public="true" max-age="3600"/>
+    </mvc:resources>
+
+    <mvc:interceptors>
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--<mvc:exclude-mapping path="/resources/**"/>-->
+            <!--<mvc:exclude-mapping path="/commons/**"/>-->
+            <!--<beans:bean class="cn.wuxia.project.basic.mvc.filter.OauthInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/resources/**"/>
+            <mvc:exclude-mapping path="/commons/**"/>
+            <beans:bean class="cn.wuxia.project.basic.mvc.filter.ApiAuthInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mapping path="/**"/>
+            <mvc:exclude-mapping path="/resources/**"/>
+            <mvc:exclude-mapping path="/commons/**"/>
+            <beans:bean class="cn.wuxia.common.spring.mvc.MessageInterceptor">
+                <beans:property name="messageSourceHandler" ref="messageSourceHandler"/>
+            </beans:bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- 装配数据库配置 -->
+
+    <beans:bean id="mappingJacksonHttpMessageConverter"
+                class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <!-- 解决 HttpMediaTypeNotAcceptableException: Could not find acceptable representation -->
+        <!--<beans:property name="supportedMediaTypes">
+            <beans:list>
+                <beans:bean class="org.springframework.http.MediaType">
+                    <beans:constructor-arg
+                            index="0" value="text"/>
+                    <beans:constructor-arg index="1" value="*"/>
+                    <beans:constructor-arg index="2" value="UTF-8"/>
+                </beans:bean>
+            </beans:list>
+        </beans:property>-->
+        <!-- 全局设置解析json后的时间格式, 如需要指定格式请在指定字段get方法使用@JsonFormat -->
+        <beans:property name="objectMapper">
+            <beans:bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                <beans:property name="dateFormat">
+                    <beans:bean class="java.text.SimpleDateFormat">
+                        <beans:constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+                    </beans:bean>
+                </beans:property>
+                <beans:property name="timeZone">
+                    <beans:bean class="java.util.TimeZone" factory-method="getTimeZone">
+                        <beans:constructor-arg value="GMT+08"/>
+                    </beans:bean>
+                </beans:property>
+                <!-- 为null字段时不显示 -->
+                <beans:property name="serializationInclusion">
+                    <beans:value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</beans:value>
+                </beans:property>
+            </beans:bean>
+        </beans:property>
+
+
+
+    </beans:bean>
+
+    <!-- Enables the Spring MVC @Controller programming model -->
+    <mvc:annotation-driven>
+        <!-- 从1.2.1开始不再支持@RequestJsonParam及@FormModel -->
+        <!--<mvc:argument-resolvers>-->
+            <!--<beans:bean class="cn.wuxia.common.spring.mvc.resolver.RequestJsonParamMethodArgumentResolver"/>-->
+            <!--<beans:bean class="cn.wuxia.common.spring.mvc.resolver.FormModelMethodArgumentResolver"/>-->
+        <!--</mvc:argument-resolvers>-->
+        <mvc:message-converters register-defaults="false">
+            <beans:bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <beans:bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+            <beans:ref bean="mappingJacksonHttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- ===================================================== -->
+    <!-- springmvc view resolver -->
+    <beans:bean class="cn.wuxia.project.basic.mvc.InitResouceViewResolver"/>
+    <!-- ViewResolver For FreeMarker -->
+    <beans:bean class="cn.wuxia.project.basic.mvc.InitResouceFreeMakerViewResolver"/>
+    <!-- ViewResolver For FreeMarkerConfigurer -->
+    <beans:bean id="freemarkerConfig" class="cn.wuxia.project.basic.mvc.InitResouceFreeMarkerConfigurer"/>
+    <!-- Exception Handler, v2.0.1(20190426)不再使用xml配置，使用@ControllerAdvice 或者 @Bean的方式代替自定义的错误处理方法 -->
+    <!--<beans:bean class="cn.wuxia.common.spring.mvc.resolver.CustomSpringMvcHandlerExceptionResolver">-->
+        <!--<beans:property name="messageSourceHandler" ref="messageSourceHandler"/>-->
+    <!--</beans:bean>-->
+    <!-- Upload resolver-->
+    <beans:bean id="multipartResolver" class="cn.wuxia.project.basic.mvc.InitCommonsMultipartResolver"/>
+    <!--Interceptor -->
+    <beans:bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+    <!-- ===================================================== -->
+
+    <mvc:default-servlet-handler/>
+
+</beans:beans>

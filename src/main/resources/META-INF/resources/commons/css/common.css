@@ -1,0 +1,77 @@
+@charset "utf-8";
+/*
+ * Name: common.css
+ * Author: gordon.
+ * Date:2012-06-12 
+ */
+ 
+body { font:12px "微软雅黑",sans-serif;}
+a{ text-decoration:none;}
+a:hover{ text-decoration:none; cursor:pointer;}
+.f_l { float:left;}
+.f_r { float:right;}
+.f_8 { font-size:8px;}
+.f_10 { font-size:10px; }
+.f_12 { font-size:12px;}
+.f_14 { font-size:14px;}
+.f_16 { font-size:16px;}
+.f_18 { font-size:18px;}
+.f_20 { font-size:20px;}
+.f_22 { font-size:22px;}
+.f_24 { font-size:24px;}
+.f_26 { font-size:26px;}
+.mb_30 { margin-bottom:30px;}
+.mb_25 { margin-bottom:25px;}
+.mb_15 { margin-bottom:15px;}
+.mb_5 { margin-bottom:5px;}
+.ml_5 { margin-left:5px;}
+.ml_10 { margin-left:10px;}
+.ml_15 { margin-left:15px;}
+.ml_20 { margin-left:20px;}
+.ml_40 { margin-left:40px;}
+.ml_60 { margin-left:60px;}
+.mr_5 { margin-right:5px;}
+.mr_10 { margin-right:10px;}
+.mr_15 { margin-right:15px;}
+.mr_20 { margin-right:20px;}
+.mr_40 { margin-right:40px;}
+.mr_60 { margin-right:60px;}
+.mr_100 { margin-right:100px;}
+.mr_200 { margin-right:200px;}
+.mr_400 { margin-right:400px;}
+.mt_5 { margin-top:5px;}
+.mt_6 { margin-top:6px;}
+.mt_8 { margin-top:8px;}
+.mt_10 { margin-top:10px;}
+.mt_20 { margin-top:20px;}
+.pl_10 { padding-left:10px;}
+.pl_15 { padding-left:15px;}
+.pl_20 { padding-left:20px;}
+.pl_30 { padding-left:30px;}
+.pl_40 { padding-left:40px;}
+.pt_10{ padding-top:10px;}
+.w_280 { width:280px;}
+.w_240 { width:240px;}
+.w_200 { width:200px;}
+.w_170 { width:170px;}
+.w_160 { width:160px;}
+.w_120 { width:120px;}
+.w_100 { width:100px;}
+.w_80 { width:80px}
+.w_50 { width:50px}
+.h_50 { height:50px;}
+.h_100 { height:100px;}
+.ta_c { text-align:center;}
+.ta_r { text-align:right;}
+.bold { font-weight:bold;}
+.color51A { color:#51A5C3;}
+.color4D { color:#4D4D4D;}
+.color66 { color:#666666;}
+.color99 { color:#999999;}
+.colorF78 { color:#F78E35;}
+.colorRed{ color:#f00;}
+.color20f { color:#a20f00;}
+.colorec5 { color:#ec5b2f;}
+.redLink a { color:#812018; text-decoration:underline;}
+.bor-r { border-right:1px dotted #E4E4E4;}
+.va_m { vertical-align:middle;}

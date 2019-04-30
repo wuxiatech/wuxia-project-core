@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false" name="localCache">
+	<diskStore path="java.io.tmpdir/ehcache/local" />
+	<!-- DefaultCache setting. -->
+	<defaultCache maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600"
+		overflowToDisk="true" maxEntriesLocalDisk="100000" />
+	<!-- eternal 是否永远有效，maxBytesLocalHeap 内存缓存的大小，maxEntriesLocalHeap 缓存的对象数   -->
+	<!-- Special objects setting. -->
+	<cache name="tempData" maxBytesLocalHeap="100M" eternal="false" timeToIdleSeconds="1800" timeToLiveSeconds="1800"
+		overflowToDisk="false" />
+	<cache name="baseData" maxEntriesLocalHeap="100000" eternal="true" overflowToDisk="false" />
+
+</ehcache>

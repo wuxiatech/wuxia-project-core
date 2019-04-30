@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        version="2.0">
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>core functions</short-name>
+    <uri>/project/functions</uri>
+    <display-name>content management system functions lib</display-name>
+    <description>Tag lib for functions used in jsp.</description>
+    <function>
+        <name>encodeUrl</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String encodeUrl(java.lang.Object)
+        </function-signature>
+    </function>
+    <function>
+        <name>decodeUrl</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String decodeUrl(java.lang.Object)
+        </function-signature>
+    </function>
+    <function>
+        <name>encode</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String encode(java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>decode</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String decode(java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>replace</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String replace(java.lang.String,java.lang.String,java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>replaceic</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String replaceic(java.lang.String,java.lang.String,java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>replaceBetween</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String replaceBetween(java.lang.String,java.lang.Integer,java.lang.Integer)
+        </function-signature>
+    </function>
+    <function>
+        <name>contants</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            boolean contants(java.lang.Object,java.lang.Object)
+        </function-signature>
+    </function>
+    <function>
+        <name>jsonToMap</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.util.Map jsonToMap(java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>toJson</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String toJson(java.lang.Object)
+        </function-signature>
+    </function>
+    <function>
+        <name>filepath</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String getFilepathById(java.lang.String)
+        </function-signature>
+    </function>
+
+    <function>
+        <name>filepaths</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String[] getFilepathBySetId(java.lang.String)
+        </function-signature>
+    </function>
+
+    <function>
+        <name>thumbpath</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String getThumbFilepathById(java.lang.String)
+        </function-signature>
+    </function>
+
+    <function>
+        <description>根据字典id获取字典对象，返回的是DicBean对象</description>
+        <name>dic</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            cn.funmeet.basic.core.conf.support.DicBean getDicById(java.lang.String)
+        </function-signature>
+        <example>${ifn:dic(dicid)}</example>
+    </function>
+    <function>
+        <description>根据字典code获取字典值</description>
+        <name>dicbycode</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String getDic(java.lang.String, java.lang.String)
+        </function-signature>
+        <example>${ifn:dicbycode(diccode, dicparentcode)}</example>
+    </function>
+    <function>
+        <name>dics</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.util.List getDicsByParentCode(java.lang.String)
+        </function-signature>
+    </function>
+
+    <function>
+        <name>tag</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            cn.funmeet.basic.core.conf.support.TagBean getTag(java.lang.String)
+        </function-signature>
+        <example>${ifn:tag(tagid)}</example>
+    </function>
+
+    <function>
+        <name>tags</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.util.List getTags(java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>ctx</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String getctx(java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>simpleParse</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String stringSimpleParse(java.lang.String,java.lang.Object)
+        </function-signature>
+    </function>
+    <function>
+        <name>spelParse</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String stringSPELParse(java.lang.String,java.lang.Object)
+        </function-signature>
+    </function>
+    <function>
+        <name>menus</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>java.util.List menus(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>ipaddr</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>java.lang.String ipBelongingTo(java.lang.String)</function-signature>
+    </function>
+
+</taglib>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/cache  http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <!-- XMemcachedClientBuilder have two arguments.First is server list,and second is weights array. -->
+    <bean id="xMemcachedClient" class="cn.wuxia.common.cached.memcached.XMemcachedClient" lazy-init="true">
+        <property name="memcachedClient" ref="memcachedClient">
+        </property>
+        <property name="expiredTime" value="${memcached.expiredTime}"/>
+    </bean>
+    <bean name="memcachedClient" class="net.rubyeye.xmemcached.utils.XMemcachedClientFactoryBean">
+        <property name="servers">
+            <!-- <value>${memcached.server2},${memcached.server3}</value> -->
+            <value>${memcached.server2}</value>
+        </property>
+        <!-- server's weights -->
+        <property name="weights">
+            <list>
+                <value>${memcached.weights2}</value>
+                <!-- <value>${memcached.weights3}</value> -->
+            </list>
+        </property>
+        <property name="connectionPoolSize" value="${memcached.poolSize}"></property>
+        <property name="failureMode" value="${memcached.failureMode}"></property>
+        <property name="commandFactory">
+            <bean class="net.rubyeye.xmemcached.command.TextCommandFactory"></bean>
+        </property>
+        <property name="sessionLocator">
+            <bean class="net.rubyeye.xmemcached.impl.KetamaMemcachedSessionLocator"></bean>
+        </property>
+        <property name="transcoder">
+            <bean class="net.rubyeye.xmemcached.transcoders.SerializingTranscoder"/>
+        </property>
+        <!-- ByteBuffer allocator -->
+        <property name="bufferAllocator">
+            <bean class="net.rubyeye.xmemcached.buffer.SimpleBufferAllocator"></bean>
+        </property>
+        <property name="opTimeout" value="10000"/>
+    </bean>
+    <!-- Use factory bean to build memcached client -->
+
+    <!-- <import resource="classpath*:/simplesm-context.xml" /> <bean name="defaultMemcachedCache" class="com.google.code.ssm.CacheFactory">
+        <property name="cacheClientFactory"> <bean name="cacheClientFactory" class="com.google.code.ssm.providers.xmemcached.MemcacheClientFactoryImpl"
+        /> </property> <property name="addressProvider"> <bean class="com.google.code.ssm.config.DefaultAddressProvider"> <property
+        name="address" value="${memcached.server2}" /> </bean> </property> <property name="configuration"> <bean class="com.google.code.ssm.providers.CacheConfiguration">
+        <property name="consistentHashing" value="true" /> </bean> </property> </bean> -->
+
+
+    <cache:annotation-driven cache-manager="cacheManager"/>
+
+    <!-- spring自己的换管理器，这里定义了缓存位置名称 ，既注解中的value -->
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="xMemcachedClient"/>
+                    <property name="cacheName" value="2MinutesData"/>
+                    <!-- 缓存定义有效期为2分钟 -->
+                    <property name="expiredTime" value="120"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="xMemcachedClient"/>
+                    <property name="cacheName" value="10MinutesData"/>
+                    <!-- 缓存定义有效期为10分钟 -->
+                    <property name="expiredTime" value="600"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="xMemcachedClient"/>
+                    <property name="cacheName" value="30MinutesData"/>
+                    <!-- 缓存定义有效期为30分钟 -->
+                    <property name="expiredTime" value="1800"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="xMemcachedClient"/>
+                    <property name="cacheName" value="1HourData"/>
+                    <!-- 缓存定义有效期为1小时 -->
+                    <property name="expiredTime" value="3600"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="xMemcachedClient"/>
+                    <!-- 定义了一个长时间的缓存2HourData -->
+                    <property name="cacheName" value="2HourData"/>
+                    <!-- 缓存定义有效期为2小时 -->
+                    <property name="expiredTime" value="7200"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="xMemcachedClient"/>
+                    <!-- 定义了一个长时间的缓存4HourData -->
+                    <property name="cacheName" value="4HourData"/>
+                    <!-- 缓存定义有效期为4小时 -->
+                    <property name="expiredTime" value="14400"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="xMemcachedClient"/>
+                    <!-- 定义了一个长时间的缓存1DayData -->
+                    <property name="cacheName" value="1DayData"/>
+                    <!-- 缓存定义有效期为1天 -->
+                    <property name="expiredTime" value="86400"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+            </set>
+        </property>
+    </bean>
+</beans>

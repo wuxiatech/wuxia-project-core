@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false" name="hibernateCache">
+
+	<diskStore path="java.io.tmpdir/ehcache/hibernate" />
+
+	<!-- DefaultCache setting. -->
+	<defaultCache maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600"
+		overflowToDisk="true" maxEntriesLocalDisk="100000" />
+
+	<!-- Special objects setting. -->
+	<cache name="org.hibernate.cache.spi.UpdateTimestampsCache" maxEntriesLocalHeap="10000" eternal="true"
+		overflowToDisk="false" />
+	<cache name="org.hibernate.cache.internal.StandardQueryCache" maxEntriesLocalHeap="10000" eternal="true"
+		overflowToDisk="false" />
+
+	<cache name="cn.wuxia.project.basic.core.resource.model.UploadFileInfo" maxEntriesLocalHeap="10000" eternal="true"
+           overflowToDisk="false" />
+	<cache name="cn.wuxia.project.basic.core.resource.model.UploadFileSetInfo" maxEntriesLocalHeap="10000" eternal="true"
+           overflowToDisk="false" />
+	<cache name="cn.wuxia.project.basic.core.resource.model.UploadFileSetRef" maxEntriesLocalHeap="10000" eternal="true"
+           overflowToDisk="false" />
+	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityPermission" maxEntriesLocalHeap="10000" eternal="true"
+           overflowToDisk="false" />
+	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityPermissionResourcesRef" maxEntriesLocalHeap="10000" eternal="true"
+           overflowToDisk="false" />
+	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityResources" maxEntriesLocalHeap="10000" eternal="true"
+           overflowToDisk="false" />
+	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityRole" maxEntriesLocalHeap="10000" eternal="true"
+           overflowToDisk="false" />
+	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityRolePermissionRef" maxEntriesLocalHeap="10000" eternal="true"
+           overflowToDisk="false" />
+	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityUserRoleRef" maxEntriesLocalHeap="10000" eternal="true"
+           overflowToDisk="false" />
+</ehcache>

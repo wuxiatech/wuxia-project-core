@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="true">
+
+    <description>Spring公共配置</description>
+
+    <!-- classpath:*.properties将慢慢别代替，请将需要加载的properties文件放进classpath:properties文件夹中 -->
+    <context:property-placeholder ignore-resource-not-found="true"
+                                  location="classpath*:properties/*-default.properties,
+                      classpath:properties/*.properties,
+					  classpath:application.properties,
+					  classpath:hibernate.properties,
+					  classpath:memcached.properties,
+					  classpath:security.properties,
+					  classpath:mongodb.properties,
+					  classpath:quartz.properties,
+					  classpath:email.properties"/>
+    <!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
+    <context:component-scan base-package="cn.wuxia.common"/>
+    <context:component-scan base-package="cn.wuxia.project.common"/>
+    <context:component-scan base-package="cn.wuxia.project">
+        <context:exclude-filter type="regex" expression="cn.wuxia.project.*.test.*"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+    <bean class="cn.wuxia.common.spring.SpringContextHolder" lazy-init="false"/>
+
+
+    <bean id="validationMessageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath*:validation/messages</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <!-- hibernate validator -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
+        <property name="validationMessageSource" ref="validationMessageSource"/>
+    </bean>
+
+
+    <bean class="cn.wuxia.common.spring.support.ValidationHandler">
+        <property name="validator" ref="validator"/>
+    </bean>
+
+    <!-- 消息及国际化处理 -->
+    <bean id="messageSourceHandler" class="cn.wuxia.common.spring.support.MessageSourceHandler"/>
+
+    <!-- 必须 -->
+    <import resource="classpath*:applicationContext-jta.xml"/>
+    <import resource="classpath*:applicationContext-hibernate.xml"/>
+    <import resource="classpath*:applicationContext-mongo.xml"/>
+    <import resource="classpath*:/query/*.xml"/>
+</beans>
