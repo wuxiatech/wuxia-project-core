@@ -16,6 +16,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,36 +35,23 @@ public class SitemapServiceImpl {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 
-
     @Autowired
     private GenerateStaticPageService generateStaticPageService;
 
     /**
-    * <pre>
-    * http://share.fddlife.com/article/ckbgfa
-    * </pre>
-    */
+     * <pre>
+     * http://share.fddlife.com/article/ckbgfa
+     * </pre>
+     */
     private final String article = "/article/";
 
     /**
      * 存放xml的路径为根路径
      */
-    private final static String xmlPath;
+    private String xmlPath;
 
-    private final static String ctx;
+    private String ctx = ApplicationPropertiesUtil.getPropertiesValue("sitemap.domain");
 
-    static {
-        ServletContext sc = SpringContextHolder.getServletContext();
-        if (sc != null) {
-            xmlPath = sc.getRealPath("/") + "/sitemap/";
-        } else {
-            String currentPath = ClassLoaderUtil.getAbsolutePathOfClassLoaderClassPath();
-            xmlPath = StringUtil.replace(currentPath, "file:", "").replace("/WEB-INF/classes/", "/sitemap/");
-        }
-
-        String path = ApplicationPropertiesUtil.getPropertiesValue("sitemap.domain");
-        ctx = StringUtil.isBlank(path) ? "http://share.fddlife.com" : path;
-    }
 
     public void genSitemapXml(String target) {
 
@@ -87,10 +75,10 @@ public class SitemapServiceImpl {
 
     /**
      * 生成一个sitemapxml
-     * 
-     * @author songlin
+     *
      * @param staticPage
      * @throws Exception
+     * @author songlin
      */
     private void createXMLFile(List<SitemapXmlBean> smsbList, String desc, String fileName) throws Exception {
         //建立document对象  
@@ -139,9 +127,10 @@ public class SitemapServiceImpl {
      * <pre>
      * http://share.fddlife.com/article/eszvtqhtml
      * </pre>
-     * @author songlin
+     *
      * @param staticPage
      * @throws Exception
+     * @author songlin
      */
     public void genArticleXml(String target) throws Exception {
         genArticleXmlByPage(target, 1);
@@ -149,9 +138,10 @@ public class SitemapServiceImpl {
 
     /**
      * 每份xml最多有50000条url
-     * @author songlin
+     *
      * @param target
      * @param pageNo
+     * @author songlin
      */
     private void genArticleXmlByPage(String target, int pageNo) {
 //        Pages<WxNews> page = new Pages(pageNo, 50000);
@@ -181,5 +171,19 @@ public class SitemapServiceImpl {
         } catch (Exception e) {
             logger.error("", e);
         }
+    }
+
+
+    public String getXmlPath() throws Exception {
+        if(StringUtil.isBlank(xmlPath)){
+        ServletContext sc = SpringContextHolder.getServletContext();
+        if (sc != null) {
+            xmlPath = sc.getRealPath("/") + "/sitemap/";
+        } else {
+            String currentPath = ClassLoaderUtil.getAbsolutePathOfClassLoaderClassPath();
+            xmlPath = StringUtil.replace(currentPath, "file:", "").replace("/WEB-INF/classes/", "/sitemap/");
+        }
+        }
+        return xmlPath;
     }
 }

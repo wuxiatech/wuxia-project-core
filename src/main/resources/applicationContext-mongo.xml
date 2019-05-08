@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+	http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd" default-lazy-init="true">
 
     <bean id="secondaryPreferredReadPreference"
           class="com.mongodb.TaggableReadPreference.SecondaryPreferredReadPreference"></bean>
@@ -49,6 +49,6 @@
         <constructor-arg name="mongoConverter" ref="baseMappingMongoConverter"/>
     </bean>
 
-    <mongo:repositories base-package="cn.wuxia.project.basic.core,cn.wuxia.project.ws.wechat"
+    <mongo:repositories base-package="cn.wuxia.project"
                         mongo-template-ref="baseMongoTemplate"></mongo:repositories>
 </beans>

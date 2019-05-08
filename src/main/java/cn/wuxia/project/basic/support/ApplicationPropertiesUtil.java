@@ -27,10 +27,12 @@ public class ApplicationPropertiesUtil {
     private static Properties initProperties = PropertiesUtils.loadProperties(new String[]{"classpath:properties/application.properties", "classpath:application.properties"});
 
     private static Props props = new Props();
+
     static {
         System.out.println(initProperties.getProperty("dmyy"));
         props.load(initProperties);
     }
+
     /**
      * 请使用
      *
@@ -45,43 +47,46 @@ public class ApplicationPropertiesUtil {
     /**
      * 也可以使用@Value（不支持宏命令）标签获取application.properties的值
      * 本方法扩展获取数据字典中的值及宏命令
-     * @see {@link #getValue(String, String...)}
+     *
      * @param key
      * @return
      * @author songlin
+     * @see {@link #getValue(String, String...)}
      */
     @Deprecated
     public static String getPropertiesValue(String key) {
-    	try {
-			
-		
-        if (getProperties().containsKey(key)) {
-            String value = getProperties().getProperty(key);
-            String[] keys = StringUtil.getTemplateKey(value);
-            if (ArrayUtil.isNotEmpty(keys)) {
-                for (String k : keys) {
-                 value =   StringUtil.replaceKeysSimple(value,k, getProperties().getProperty(k));
+        try {
+
+
+            if (getProperties().containsKey(key)) {
+                String value = getProperties().getProperty(key);
+                String[] keys = StringUtil.getTemplateKey(value);
+                if (ArrayUtil.isNotEmpty(keys)) {
+                    for (String k : keys) {
+                        value = StringUtil.replaceKeysSimple(value, k, getProperties().getProperty(k));
+                    }
                 }
-            }
-            return value;
-        } else
-            return DTools.dic(key);
-    	} catch (Exception e) {
-			System.out.println("error:" + e.getMessage());
-		}
-    	return null;
+                return value;
+            } else
+                return DTools.dic(key);
+        } catch (Exception e) {
+            System.out.println("error:" + e.getMessage());
+        }
+        return null;
     }
+
     /**
      * 也可以使用@Value（不支持宏命令）标签获取application.properties的值
      * 本方法扩展获取数据字典中的值
      * <a>https://jodd.org/props/</a>
+     *
      * @param key
      * @return
      * @author songlin
      */
     public static String getValue(String key, String... profiles) {
         if (getProperties().containsKey(key)) {
-             String  value =  props.getValue(key, profiles);
+            String value = props.getValue(key, profiles);
             return value;
         } else
             return DTools.dic(key);

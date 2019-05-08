@@ -77,36 +77,13 @@
             java.lang.String toJson(java.lang.Object)
         </function-signature>
     </function>
-    <function>
-        <name>filepath</name>
-        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
-        <function-signature>
-            java.lang.String getFilepathById(java.lang.String)
-        </function-signature>
-    </function>
-
-    <function>
-        <name>filepaths</name>
-        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
-        <function-signature>
-            java.lang.String[] getFilepathBySetId(java.lang.String)
-        </function-signature>
-    </function>
-
-    <function>
-        <name>thumbpath</name>
-        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
-        <function-signature>
-            java.lang.String getThumbFilepathById(java.lang.String)
-        </function-signature>
-    </function>
 
     <function>
         <description>根据字典id获取字典对象，返回的是DicBean对象</description>
         <name>dic</name>
         <function-class>cn.wuxia.project.basic.support.Functions</function-class>
         <function-signature>
-            cn.funmeet.basic.core.conf.support.DicBean getDicById(java.lang.String)
+            cn.wuxia.project.basic.core.conf.support.DicBean getDicById(java.lang.String)
         </function-signature>
         <example>${ifn:dic(dicid)}</example>
     </function>
@@ -120,6 +97,15 @@
         <example>${ifn:dicbycode(diccode, dicparentcode)}</example>
     </function>
     <function>
+        <description>根据字典code获取字典值</description>
+        <name>dic2</name>
+        <function-class>cn.wuxia.project.basic.support.Functions</function-class>
+        <function-signature>
+            java.lang.String getDicByCode(java.lang.String)
+        </function-signature>
+        <example>${ifn:dic2(diccode)}</example>
+    </function>
+    <function>
         <name>dics</name>
         <function-class>cn.wuxia.project.basic.support.Functions</function-class>
         <function-signature>
@@ -131,7 +117,7 @@
         <name>tag</name>
         <function-class>cn.wuxia.project.basic.support.Functions</function-class>
         <function-signature>
-            cn.funmeet.basic.core.conf.support.TagBean getTag(java.lang.String)
+            cn.wuxia.project.basic.core.conf.support.TagBean getTag(java.lang.String)
         </function-signature>
         <example>${ifn:tag(tagid)}</example>
     </function>
