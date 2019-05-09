@@ -32,9 +32,10 @@ public class DConstants extends Constants {
 
     public final static String AUTHENTICATION_TIME_PARAMETER_NAME = "API-Authentication-Time";
 
-    public final static String BING_MP_WITHAPPLY = "绑定提现";
-
-    public final static String KEFU_MP = "人工客服";
+    /**
+     * 当前运行项目
+     */
+    public final static String CURRENT_PLATFORM = "current_platform";
     /**
      * 日志级别字典值
      */
@@ -60,7 +61,13 @@ public class DConstants extends Constants {
      */
     public static String getPlatform() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String currentPlatform = request.getHeader(Constants.HEADER_PLATFORM_NAME);
+        String currentPlatform = null;
+        if (request != null) {
+            currentPlatform = request.getHeader(Constants.HEADER_PLATFORM_NAME);
+        }
+        if (StringUtil.isBlank(currentPlatform)) {
+            currentPlatform = DTools.dic(CURRENT_PLATFORM);
+        }
         logger.info("platform:{}", currentPlatform);
         return currentPlatform;
     }

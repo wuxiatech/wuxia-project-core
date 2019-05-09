@@ -2,7 +2,6 @@ package cn.wuxia.project.basic.core.conf.entity;
 
 import cn.wuxia.common.util.ArrayUtil;
 import cn.wuxia.common.util.reflection.ReflectionUtil;
-import cn.wuxia.project.basic.core.conf.enums.PointActionEnum;
 import cn.wuxia.project.common.model.ModifyInfoMongoEntity;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,10 +19,6 @@ public class KeyPoint extends ModifyInfoMongoEntity {
 
     public KeyPoint() {
         super();
-    }
-
-    public KeyPoint(PointActionEnum action) {
-        this(action.name());
     }
 
     public KeyPoint(String action) {

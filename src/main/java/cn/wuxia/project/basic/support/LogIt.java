@@ -2,7 +2,6 @@ package cn.wuxia.project.basic.support;
 
 import cn.wuxia.common.spring.SpringContextHolder;
 import cn.wuxia.project.basic.core.conf.entity.KeyPoint;
-import cn.wuxia.project.basic.core.conf.enums.PointActionEnum;
 import cn.wuxia.project.basic.core.conf.service.KeyPointService;
 import cn.wuxia.project.common.support.AsyncTaskManager;
 import org.slf4j.Logger;
@@ -28,13 +27,13 @@ public class LogIt {
         return asyncTaskManager;
     }
 
-    public static void action(PointActionEnum pointKeysEnum) {
+    public static void action(String pointKey) {
         if (getAsyncTaskManager() != null) {
             asyncTaskManager.getExecutor().execute(() -> {
-                keyPointService.save(new KeyPoint(pointKeysEnum));
+                keyPointService.save(new KeyPoint(pointKey));
             });
         } else {
-            keyPointService.save(new KeyPoint(pointKeysEnum));
+            keyPointService.save(new KeyPoint(pointKey));
         }
     }
 }
