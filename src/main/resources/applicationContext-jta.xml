@@ -67,12 +67,12 @@
     <bean id="logAspect" class="cn.wuxia.project.common.support.CustomLogAspect" lazy-init="false"/>
     <!-- define which method will be involved in the transaction -->
     <aop:config expose-proxy="true">
-        <aop:advisor pointcut="execution(* cn.funmeet..service.*.*(..)) || execution(* cn.wuxia.project..service.*.*(..))" advice-ref="txAdvice"/>
+        <aop:advisor pointcut="execution(* cn..*.service.*.*(..))" advice-ref="txAdvice"/>
         <!--<aop:advisor -->
         <!--pointcut="execution(* .core.*.service.*.*(..))" -->
         <!--advice-ref="baseTxAdvice"/> -->
         <aop:aspect ref="logAspect">
-            <aop:around pointcut="execution(* cn.funmeet..*.service.*.*(..)) || execution(* cn.wuxia.project..service.*.*(..))" method="invoke"/>
+            <aop:around pointcut="execution(* cn..*.service.*.*(..))" method="invoke"/>
         </aop:aspect>
     </aop:config>
     <!-- 某些地方直接使用transactionManager -->

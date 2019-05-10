@@ -221,8 +221,10 @@ public class DTools {
     public static List<MenuBean> menuByGroup(String groupcode, String platform) {
         List<MenuBean> list = menuGroupService.findByCode(groupcode);
         if (ListUtil.isNotEmpty(list)) {
-            for (MenuBean menuBean : list) {
-                resolvingUrl(menuBean, platform);
+            if (StringUtil.isNotBlank(platform)) {
+                for (MenuBean menuBean : list) {
+                    resolvingUrl(menuBean, platform);
+                }
             }
             return list;
         }
