@@ -7,7 +7,8 @@ import cn.wuxia.common.util.MapUtil;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.web.httpclient.*;
 import cn.wuxia.project.basic.support.DConstants;
-import cn.wuxia.project.common.bean.CallbackBean;
+import cn.wuxia.project.common.api.ApiRequestBean;
+import cn.wuxia.project.common.api.ApiResponseBean;
 import cn.wuxia.project.common.support.Constants;
 import com.google.common.collect.Maps;
 import org.apache.http.entity.ByteArrayEntity;
@@ -72,16 +73,17 @@ public class RestApiUtil {
     public RestApiUtil addParams(Map<String, Object> params) {
         if (MapUtil.isEmpty(params)) {
             return this;
-        } else if (MapUtil.isEmpty(this.params))
+        } else if (MapUtil.isEmpty(this.params)) {
             this.params = Maps.newHashMap();
+        }
         this.params.putAll(params);
         return this;
     }
 
     public RestApiUtil addParam(String key, Object value) {
-        if (MapUtil.isEmpty(params))
+        if (MapUtil.isEmpty(params)) {
             params = Maps.newHashMap();
-
+        }
         params.put(key, value);
         return this;
     }
@@ -102,7 +104,7 @@ public class RestApiUtil {
      * @return
      * @author songlin
      */
-    public CallbackBean send() throws IOException, HttpClientException {
+    public ApiResponseBean send() throws IOException, HttpClientException {
 
         Assert.notNull(appid, "appid不能为空");
         Assert.notNull(url, "url不能为空");
@@ -128,11 +130,12 @@ public class RestApiUtil {
         }
         byte[] callback = response.getByteResult();
         if (ArrayUtil.isNotEmpty(callback)) {
-            CallbackBean callbackBean = JacksonMapper.nonDefaultMapper().getMapper().readValue(callback, CallbackBean.class);
+            ApiResponseBean callbackBean = JacksonMapper.nonDefaultMapper().getMapper().readValue(callback, ApiResponseBean.class);
             logger.debug("callback={}", callbackBean);
             return callbackBean;
-        } else
-            return CallbackBean.ok();
+        } else {
+            return ApiRequestBean.ok();
+        }
     }
 
 }

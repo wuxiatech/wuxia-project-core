@@ -8,6 +8,7 @@
 */
 package cn.wuxia.project.basic.api;
 
+@Deprecated
 public enum WsApiMethodEnum {
 
 

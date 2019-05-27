@@ -1,8 +1,8 @@
 package cn.wuxia.project.basic.api;
 
 import cn.wuxia.common.util.StringUtil;
-import cn.wuxia.project.common.bean.CallbackBean;
-import cn.wuxia.project.common.bean.RequestBean;
+import cn.wuxia.project.common.api.ApiResponseBean;
+import cn.wuxia.project.common.api.RequestBean;
 import cn.wuxia.project.common.open.AppApiException;
 import cn.wuxia.project.common.open.api.ApiUtil;
 import cn.wuxia.project.common.support.Constants;
@@ -20,6 +20,7 @@ import java.util.Map;
  *
  * @author songlin
  */
+@Deprecated
 public class WsApiUtil extends ApiUtil {
     protected static Props props = new Props();
 
@@ -88,7 +89,7 @@ public class WsApiUtil extends ApiUtil {
      * @return
      * @author songlin
      */
-    public CallbackBean post2Gateway(Object param, WsApiMethodEnum method) throws AppApiException {
+    public ApiResponseBean post2Gateway(Object param, WsApiMethodEnum method) throws AppApiException {
         Assert.notNull(APP_KEY, "APP_KEY不能为空，请先调用key方法");
         String servicename = apiGateway;
         /**
@@ -99,13 +100,13 @@ public class WsApiUtil extends ApiUtil {
         }
         Map<String, String> headers = Maps.newHashMap();
         headers.put(Constants.HEADER_APPID_NAME, APP_KEY);
-        CallbackBean callbackBean = post2Gateway(new RequestBean(method.getMethodName(), param, method.getVersion()), servicename, headers, APP_KEY,
+        ApiResponseBean callbackBean = post2Gateway(new RequestBean(method.getMethodName(), param, method.getVersion()), servicename, headers, APP_KEY,
                 APP_SECRET);
         logger.debug("return type : {}", callbackBean.getResultType());
         return callbackBean;
     }
 
-    public CallbackBean post2Gateway(Object param, String method) throws AppApiException {
+    public ApiResponseBean post2Gateway(Object param, String method) throws AppApiException {
         Assert.notNull(APP_KEY, "APP_KEY不能为空");
         String servicename = apiGateway;
         /**
@@ -117,7 +118,7 @@ public class WsApiUtil extends ApiUtil {
 
         Map<String, String> headers = Maps.newHashMap();
         headers.put(Constants.HEADER_APPID_NAME, APP_KEY);
-        CallbackBean callbackBean = post2Gateway(new RequestBean(method, param, ""), servicename, headers, APP_KEY, APP_SECRET);
+        ApiResponseBean callbackBean = post2Gateway(new RequestBean(method, param, ""), servicename, headers, APP_KEY, APP_SECRET);
         logger.debug("return type : {}", callbackBean.getResultType());
         return callbackBean;
     }
@@ -130,11 +131,11 @@ public class WsApiUtil extends ApiUtil {
      * @return
      * @author songlin
      */
-    public CallbackBean post2Gateway(WsApiMethodEnum method) throws AppApiException {
+    public ApiResponseBean post2Gateway(WsApiMethodEnum method) throws AppApiException {
         return post2Gateway(null, method);
     }
 
-    public CallbackBean post2Gateway(String method) throws AppApiException {
+    public ApiResponseBean post2Gateway(String method) throws AppApiException {
         return post2Gateway(null, method);
     }
 }
