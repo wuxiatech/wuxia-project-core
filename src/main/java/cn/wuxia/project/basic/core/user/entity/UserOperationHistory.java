@@ -27,8 +27,6 @@ public class UserOperationHistory extends ModifyInfoEntity implements Serializab
 
     private String remark;
 
-    private String serialNo;
-
     public UserOperationHistory() {
         super();
     }
@@ -77,13 +75,6 @@ public class UserOperationHistory extends ModifyInfoEntity implements Serializab
         this.remark = remark;
     }
 
-    @Column(name = "serial_no")
-    public String getSerialNo() {
-        return this.serialNo;
-    }
 
-    public void setSerialNo(String serialNo) {
-        this.serialNo = serialNo;
-    }
 
 }

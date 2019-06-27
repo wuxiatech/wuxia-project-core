@@ -1,11 +1,11 @@
 /*
-* Created on :2015年10月12日
-* Author     :wuwenhao
-* Change History
-* Version       Date         Author           Reason
-* <Ver.No>     <date>        <who modify>       <reason>
-* Copyright 2014-2020 www.ibmall.cn All right reserved.
-*/
+ * Created on :2015年10月12日
+ * Author     :wuwenhao
+ * Change History
+ * Version       Date         Author           Reason
+ * <Ver.No>     <date>        <who modify>       <reason>
+ * Copyright 2014-2020 www.ibmall.cn All right reserved.
+ */
 package cn.wuxia.project.basic.core.user.service.impl;
 
 import cn.wuxia.common.util.DateUtil;
@@ -25,8 +25,8 @@ public class UserOperationHistoryServiceImpl extends CommonServiceImpl<UserOpera
 
     @Autowired
     private UserOperationHistoryDao userOperationHistoryDao;
-    
-    
+
+
     @Override
     protected CommonDao<UserOperationHistory, String> getCommonDao() {
         return userOperationHistoryDao;
@@ -37,7 +37,7 @@ public class UserOperationHistoryServiceImpl extends CommonServiceImpl<UserOpera
     public void saveUserOperation(String uid, String userOperation, String remark) {
         UserOperationHistory history = new UserOperationHistory();
         history.setRemark(remark);
-       UserContext userContext = UserContextUtil.getUserContext();
+        UserContext userContext = UserContextUtil.getUserContext();
 //        String ip = SpringSecurityUtils.getCurrentUserIp();
         //if (StringUtil.isBlank(ip) || StringUtil.equals(ip, "127.0.0.1") || StringUtil.equals(ip, "0:0:0:0:0:0:0:1")) {
         //ip = request.getRemoteAddr();
@@ -56,15 +56,8 @@ public class UserOperationHistoryServiceImpl extends CommonServiceImpl<UserOpera
         logger.info("用户操作信息：" + history.toString());
         //        UserOperationHistoryDao userOperationHistoryDao = SpringContextHolder.getBean(UserOperationHistoryDao.class);
         userOperationHistoryDao.save(history);
-        
+
     }
-
-
-    @Override
-    public Boolean findUserOperation(String uid) {
-        return userOperationHistoryDao.findUserOperation(uid);
-    }
-
 
 
 }

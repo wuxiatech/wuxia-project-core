@@ -9,5 +9,5 @@
 package cn.wuxia.project.basic.mvc.annotation;
 
 public enum ApiAuthorizedType {
-    OPEN_TYPE, NORMAL_LOGIN, AUTHENTICATION_CODE, BLACK_WHITE_IP, CUSTOM;
+    OPEN_TYPE, NORMAL_LOGIN, AUTHENTICATION_CODE, BLACK_WHITE_IP,WEIXIN_AUTH, CUSTOM;
 }

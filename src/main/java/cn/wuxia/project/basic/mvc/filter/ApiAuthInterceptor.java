@@ -40,6 +40,8 @@ public class ApiAuthInterceptor implements HandlerInterceptor {
 
     private CustomAuthHandler customAuthHandler;
 
+    private WeixinAuthHandler weixinAuthHandler;
+
     private EnhancementAuthLoginService getAuthLoginUserService() {
         if (enhancementAuthLoginService == null) {
             enhancementAuthLoginService = SpringContextHolder.getBean(EnhancementAuthLoginService.class);
@@ -52,6 +54,13 @@ public class ApiAuthInterceptor implements HandlerInterceptor {
             customAuthHandler = SpringContextHolder.getBean(CustomAuthHandler.class);
         }
         return customAuthHandler;
+    }
+
+    private WeixinAuthHandler getWeixinAuthHandler() {
+        if (weixinAuthHandler == null) {
+            weixinAuthHandler = SpringContextHolder.getBean(WeixinAuthHandler.class);
+        }
+        return weixinAuthHandler;
     }
 
     /**
@@ -81,6 +90,8 @@ public class ApiAuthInterceptor implements HandlerInterceptor {
                             return handleAuthenticationCode(request);
                         case BLACK_WHITE_IP:
                             return handleBlackWhiteIp(request);
+                        case WEIXIN_AUTH:
+                            return handlerWeixinAuth(request, response);
                         case CUSTOM:
                             return handleCustom(request, response);
                         default:
@@ -96,6 +107,7 @@ public class ApiAuthInterceptor implements HandlerInterceptor {
         }
         return true;
     }
+
 
     /**
      * 这个方法只会在当前这个Interceptor的preHandle方法返回值为true的时候才会执行。postHandle是进行处理器拦截用的，它的执行时间是在处理器进行处理之
@@ -202,7 +214,7 @@ public class ApiAuthInterceptor implements HandlerInterceptor {
     }
 
 
-    public boolean handleLogin(HttpServletRequest request) throws AppSecurityException {
+    private boolean handleLogin(HttpServletRequest request) throws AppSecurityException {
         String validAuthentication = request.getHeader(AUTHENTICATION_LOGIN_NAME);
         byte[] authcode = Base64.decodeBase64(validAuthentication);
         String userinfo = new String(authcode);
@@ -222,7 +234,7 @@ public class ApiAuthInterceptor implements HandlerInterceptor {
         }
     }
 
-    public boolean handleAuthenticationCode(HttpServletRequest request) throws AppSecurityException {
+    private boolean handleAuthenticationCode(HttpServletRequest request) throws AppSecurityException {
         String origin = request.getHeader("Origin");
         String ajaxRequest = request.getHeader("X-Requested-With");
         /**
@@ -275,8 +287,11 @@ public class ApiAuthInterceptor implements HandlerInterceptor {
         }
     }
 
+    private boolean handlerWeixinAuth(HttpServletRequest request, HttpServletResponse response) throws AppSecurityException {
+        return getWeixinAuthHandler().handlerWeixinAuth(request, response);
+    }
 
-    public boolean handleCustom(HttpServletRequest request, HttpServletResponse response) throws AppSecurityException {
+    private boolean handleCustom(HttpServletRequest request, HttpServletResponse response) throws AppSecurityException {
         try {
             return getCustomAuthHandler().handlerCustom(request, response);
         } catch (Exception e) {

@@ -8,6 +8,8 @@
  */
 package cn.wuxia.project.basic.mvc.annotation;
 
+import org.springframework.core.annotation.AliasFor;
+
 import java.lang.annotation.*;
 
 @Target({ElementType.METHOD})
@@ -15,16 +17,22 @@ import java.lang.annotation.*;
 //@Inherited
 @Documented
 public @interface ApiAuthorized {
+    @AliasFor("type")
+    ApiAuthorizedType value() default ApiAuthorizedType.OPEN_TYPE;
 
     /**
      * 默认开放式访问
+     *
      * @return
      */
-    public ApiAuthorizedType type() default ApiAuthorizedType.OPEN_TYPE;
+    @AliasFor("value")
+    ApiAuthorizedType type() default ApiAuthorizedType.OPEN_TYPE;
 
-    public String remark() default "";
+    String remark() default "";
 
-    public String conditions() default "";
+    String conditions() default "";
 
-    public String unless() default "";
+    String unless() default "";
+
+
 }
