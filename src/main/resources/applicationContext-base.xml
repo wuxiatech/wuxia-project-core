@@ -15,6 +15,7 @@ default-lazy-init="true">
 					  classpath:application.properties,
 					  classpath:hibernate.properties,
 					  classpath:memcached.properties,
+					  classpath:redis.properties,
 					  classpath:security.properties,
 					  classpath:mongodb.properties,
 					  classpath:quartz.properties,

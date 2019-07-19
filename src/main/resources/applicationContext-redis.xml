@@ -1,77 +1,177 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:cache="http://www.springframework.org/schema/cache"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd" default-lazy-init="true">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 
-	<!-- 启用缓存注解功能，这个是必须的，否则注解不会生效，另外，该注解一定要声明在spring主配置文件中才会生效 -->
-	<!-- mode="aspectj" <context:load-time-weaver/> -->
-	<cache:annotation-driven cache-manager="cacheManager" />
-	<!-- spring自己的换管理器，这里定义了两个缓存位置名称 ，既注解中的value -->
-	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
-		<property name="caches">
-			<set>
-				<bean class="cn.wuxia.common.spring.cache.CacheImpl">
-					<property name="cacheClient" ref="redisTemplate" />
-					<!-- 由于CacheSupport中定义了默认为baseData，故设为baseData,也可设为其他值 -->
-					<property name="cacheName" value="1HourData" />
-					<!-- 缓存定义有效期为1小时 -->
-					<property name="expiredTime" value="3600" />
-				</bean>
-				<bean class="cn.wuxia.common.spring.cache.CacheImpl">
-					<property name="cacheClient" ref="redisTemplate" />
-					<!-- 定义了一个长时间的缓存2HourData -->
-					<property name="cacheName" value="2HourData" />
-					<!-- 缓存定义有效期为2小时 -->
-					<property name="expiredTime" value="7200" />
-				</bean>
-				<bean class="cn.wuxia.common.spring.cache.CacheImpl">
-					<property name="cacheClient" ref="redisTemplate" />
-					<!-- 定义了一个长时间的缓存4HourData -->
-					<property name="cacheName" value="4HourData" />
-					<!-- 缓存定义有效期为4小时 -->
-					<property name="expiredTime" value="14400" />
-				</bean>
-				<bean class="cn.wuxia.common.spring.cache.CacheImpl">
-					<property name="cacheClient" ref="redisTemplate" />
-					<!-- 定义了一个长时间的缓存1DayData -->
-					<property name="cacheName" value="1DayData" />
-					<!-- 缓存定义有效期为1天 -->
-					<property name="expiredTime" value="86400" />
-				</bean>
-			</set>
-		</property>
-	</bean>
+	http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd"
+       default-lazy-init="true">
 
-	<!-- redis 相关配置 -->
-	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
-		<property name="maxIdle" value="${redis.maxIdle}" />
-		<property name="maxWaitMillis" value="${redis.maxWait}" />
-		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
-	</bean>
+    <!-- 启用缓存注解功能，这个是必须的，否则注解不会生效，另外，该注解一定要声明在spring主配置文件中才会生效 -->
+    <!-- mode="aspectj" <context:load-time-weaver/> -->
+    <cache:annotation-driven cache-manager="cacheManager"/>
 
-	<bean id="standaloneConfig"
-		class="org.springframework.data.redis.connection.RedisStandaloneConfiguration">
-		<property name="hostName" value="${redis.host}" />
-		<property name="port" value="${redis.port}" />
-	</bean>
-	<bean id="connectionFactory"
-		  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
-		<constructor-arg name="standaloneConfig" ref="standaloneConfig" />
-		<property name="poolConfig" ref="poolConfig" />
-	</bean>
-	<bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
-		<property name="connectionFactory" ref="connectionFactory" />
-		<property name="keySerializer" ref="stringRedisSerializer" />
-		<property name="hashKeySerializer" ref="stringRedisSerializer" />
-		<property name="hashValueSerializer" ref="stringRedisSerializer" />
-	</bean>
+    <!-- spring自己的换管理器，这里定义了两个缓存位置名称 ，既注解中的value -->
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="redisCacheClient"/>
+                    <property name="cacheName" value="2MinutesData"/>
+                    <!-- 缓存定义有效期为2分钟 -->
+                    <property name="expiredTime" value="120"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="redisCacheClient"/>
+                    <property name="cacheName" value="10MinutesData"/>
+                    <!-- 缓存定义有效期为10分钟 -->
+                    <property name="expiredTime" value="600"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="redisCacheClient"/>
+                    <property name="cacheName" value="30MinutesData"/>
+                    <!-- 缓存定义有效期为30分钟 -->
+                    <property name="expiredTime" value="1800"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="redisCacheClient"/>
+                    <!-- 由于CacheSupport中定义了默认为baseData，故设为baseData,也可设为其他值 -->
+                    <property name="cacheName" value="1HourData"/>
+                    <!-- 缓存定义有效期为1小时 -->
+                    <property name="expiredTime" value="3600"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="redisCacheClient"/>
+                    <!-- 定义了一个长时间的缓存2HourData -->
+                    <property name="cacheName" value="2HourData"/>
+                    <!-- 缓存定义有效期为2小时 -->
+                    <property name="expiredTime" value="7200"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="redisCacheClient"/>
+                    <!-- 定义了一个长时间的缓存4HourData -->
+                    <property name="cacheName" value="4HourData"/>
+                    <!-- 缓存定义有效期为4小时 -->
+                    <property name="expiredTime" value="14400"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+                <bean class="cn.wuxia.common.spring.cache.CacheImpl">
+                    <property name="cacheClient" ref="redisCacheClient"/>
+                    <!-- 定义了一个长时间的缓存1DayData -->
+                    <property name="cacheName" value="1DayData"/>
+                    <!-- 缓存定义有效期为1天 -->
+                    <property name="expiredTime" value="86400"/>
+                    <property name="disableCache" value="${cache.disable:false}"/>
+                </bean>
+            </set>
+        </property>
+    </bean>
 
-	<bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-		<property name="connectionFactory" ref="connectionFactory" />
-	</bean>
+    <!-- redis 相关配置 -->
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="${redis.maxTotal:100}"/>
+        <property name="maxIdle" value="${redis.maxIdle:20}"/>
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis:2000}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow:true}"/>
+        <property name="testOnReturn" value="${redis.testOnReturn:true}"/>
+    </bean>
 
-	<bean id="stringRedisSerializer"
-		class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+    <!--redis 单机的时候的使用配置 -->
+    <bean id="redisCacheClient" class="cn.wuxia.common.cached.redis.RedisCacheClient" lazy-init="true">
+        <property name="expiredTime" value="${redis.expiredTime:3000}"/>
+        <property name="jedisPool">
+            <bean class="redis.clients.jedis.JedisPool">
+                <constructor-arg name="poolConfig" ref="poolConfig"/>
+                <constructor-arg name="host" value="${redis.host:127.0.0.1}"/>
+                <constructor-arg name="port" value="${redis.port:6379}"/>
+                <constructor-arg name="timeout" value="2000"/>
+                <constructor-arg name="password" value="${redis.auth:null}"/>
+                <constructor-arg name="database" value="${redis.dbIndex:0}"/>
+            </bean>
+        </property>
+    </bean>
+    <!--redis 分片的时候的使用配置 -->
+    <!--<bean id="jedisShardInfo"-->
+          <!--class="redis.clients.jedis.JedisShardInfo">-->
+        <!--<constructor-arg name="host" value="${redis.host:'127.0.0.1'}"/>-->
+        <!--<constructor-arg name="port" value="${redis.port:6379}"/>-->
+        <!--<property name="password" value="${redis.auth}"/>-->
+    <!--</bean>-->
+    <!--<bean id="redisCacheClient" class="cn.wuxia.common.cached.redis.RedisShardedCacheClient" lazy-init="true">-->
+    <!--<property name="password" value="${redis.auth}"/>-->
+    <!--<property name="expiredTime" value="${redis.expiredTime:3000}"/>-->
+    <!--<property name="jedisPool">-->
+    <!--<bean class="redis.clients.jedis.ShardedJedisPool">-->
+    <!--<constructor-arg name="poolConfig" ref="poolConfig"/>-->
+    <!--<constructor-arg name="shards">-->
+    <!--<list>-->
+    <!--<ref bean="jedisShardInfo"/>-->
+    <!--</list>-->
+    <!--</constructor-arg>-->
+    <!--</bean>-->
+    <!--</property>-->
+    <!--</bean>-->
+    <!--redis 集群使用配置 -->
+    <!--<bean id="redisCacheClient" class="cn.wuxia.common.cached.redis.RedisClusterCacheClient" lazy-init="true">-->
+    <!--<property name="password" value="${redis.auth}"/>-->
+    <!--<property name="expiredTime" value="${redis.expiredTime:3000}"/>-->
+    <!--<property name="jedisCluster">-->
+    <!--<bean class="redis.clients.jedis.JedisCluster">-->
+    <!--<constructor-arg name="node">-->
+    <!--<set>-->
+    <!--<bean class="redis.clients.jedis.HostAndPort">-->
+    <!--<constructor-arg name="host" value="${redis.host:'127.0.0.1'}"/>-->
+    <!--<constructor-arg name="port" value="${redis.port:6379}"/>-->
+    <!--</bean>-->
+    <!--</set>-->
+    <!--</constructor-arg>-->
+    <!--<constructor-arg name="connectionTimeout" value="10000"/>-->
+    <!--<constructor-arg name="soTimeout" value="2000"/>-->
+    <!--<constructor-arg name="maxAttempts" value="5"/>-->
+    <!--<constructor-arg name="password" value="${redis.password}"/>-->
+    <!--<constructor-arg name="poolConfig" ref="poolConfig"/>-->
+    <!--</bean>-->
+    <!--</property>-->
+    <!--</bean>-->
+
+
+    <!--配置jedis链接工厂 spring-data-redis2.0中
+        建议改为构造器传入一个RedisStandaloneConfiguration  单机
+                            RedisSentinelConfiguration  主从复制
+                            RedisClusterConfiguration  集群-->
+    <bean id="standaloneConfig"
+          class="org.springframework.data.redis.connection.RedisStandaloneConfiguration">
+        <property name="hostName" value="${redis.host:127.0.0.1}"/>
+        <property name="port" value="${redis.port:6379}"/>
+        <property name="password" ref="redisPassword"/>
+        <property name="database" value="${redis.dbIndex:0}"/>
+    </bean>
+    <!--redis链接密码-->
+    <bean id="redisPassword" class="org.springframework.data.redis.connection.RedisPassword">
+        <constructor-arg name="thePassword" value="${redis.auth:null}"></constructor-arg>
+    </bean>
+    <bean id="connectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <constructor-arg name="standaloneConfig" ref="standaloneConfig"/>
+        <property name="poolConfig" ref="poolConfig"/>
+    </bean>
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="keySerializer" ref="stringRedisSerializer"/>
+        <property name="hashKeySerializer" ref="stringRedisSerializer"/>
+        <property name="hashValueSerializer" ref="stringRedisSerializer"/>
+    </bean>
+
+    <bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+
+    <bean id="stringRedisSerializer"
+          class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+    <bean id="valueRedisSerializer"
+          class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
 </beans>
