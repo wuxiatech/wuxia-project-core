@@ -1,6 +1,5 @@
 package cn.wuxia.project.basic.support;
 
-import cn.wuxia.common.spring.SpringContextHolder;
 import cn.wuxia.common.util.*;
 import cn.wuxia.project.basic.core.conf.bean.MenuBean;
 import cn.wuxia.project.basic.core.conf.support.DTools;
@@ -10,12 +9,10 @@ import cn.wuxia.project.basic.core.conf.support.TagBean;
 import cn.wuxia.project.common.support.CacheConstants;
 import cn.wuxia.project.common.support.CacheSupport;
 import cn.wuxia.project.common.support.Constants;
-import cn.wuxia.project.common.third.aliyun.IpSeekerUtil;
-import cn.wuxia.project.common.third.aliyun.bean.IpAdress;
+import cn.wuxia.project.common.third.ip.IpUtil;
+import cn.wuxia.project.common.third.ip.bean.IpAdress;
 import com.google.common.collect.Lists;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -360,9 +357,9 @@ public class Functions {
             String ipKey = StringUtil.substringBeforeLast(ip, ".");
             String addr = (String) CacheSupport.get(CacheConstants.CACHED_VALUE_1_DAY, ipKey);
             if (StringUtil.isBlank(addr)) {
-                IpAdress ipAdress = IpSeekerUtil.getIpAdressByLocal(ip);
+                IpAdress ipAdress = IpUtil.getIpAdressByLocal(ip);
                 if (ipAdress == null || ipAdress.isEmpty()) {
-                    ipAdress = IpSeekerUtil.getAdress(ip);
+                    ipAdress = IpUtil.getAdress(ip);
                 }
                 if (ipAdress != null) {
                     List<String> detail = Lists.newArrayList();

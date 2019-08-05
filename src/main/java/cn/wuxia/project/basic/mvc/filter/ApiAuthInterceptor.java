@@ -11,7 +11,7 @@ import cn.wuxia.project.basic.mvc.annotation.ApiAuthorized;
 import cn.wuxia.project.basic.mvc.annotation.ApiAuthorizedType;
 import cn.wuxia.project.basic.support.ApplicationPropertiesUtil;
 import cn.wuxia.project.basic.support.DConstants;
-import cn.wuxia.project.common.third.ip.IPUtil;
+import cn.wuxia.project.common.third.ip.chunzhen.IPUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
