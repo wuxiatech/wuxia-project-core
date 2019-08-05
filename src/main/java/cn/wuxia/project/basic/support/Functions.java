@@ -357,10 +357,7 @@ public class Functions {
             String ipKey = StringUtil.substringBeforeLast(ip, ".");
             String addr = (String) CacheSupport.get(CacheConstants.CACHED_VALUE_1_DAY, ipKey);
             if (StringUtil.isBlank(addr)) {
-                IpAdress ipAdress = IpUtil.getIpAdressByLocal(ip);
-                if (ipAdress == null || ipAdress.isEmpty()) {
-                    ipAdress = IpUtil.getAdress(ip);
-                }
+                IpAdress ipAdress = IpUtil.bytool(ip);
                 if (ipAdress != null) {
                     List<String> detail = Lists.newArrayList();
                     if (StringUtil.isNotBlank(ipAdress.getCountry())) {
