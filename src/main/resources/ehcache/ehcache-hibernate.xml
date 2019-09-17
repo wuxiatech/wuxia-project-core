@@ -13,22 +13,22 @@
 	<cache name="org.hibernate.cache.internal.StandardQueryCache" maxEntriesLocalHeap="10000" eternal="true"
 		overflowToDisk="false" />
 
-	<cache name="cn.wuxia.project.basic.core.resource.model.UploadFileInfo" maxEntriesLocalHeap="10000" eternal="true"
+	<cache name="cn.wuxia.project.storage.core.model.UploadFileInfo" maxEntriesLocalHeap="10000" eternal="true"
            overflowToDisk="false" />
-	<cache name="cn.wuxia.project.basic.core.resource.model.UploadFileSetInfo" maxEntriesLocalHeap="10000" eternal="true"
+	<cache name="cn.wuxia.project.storage.core.model.UploadFileSetInfo" maxEntriesLocalHeap="10000" eternal="true"
            overflowToDisk="false" />
-	<cache name="cn.wuxia.project.basic.core.resource.model.UploadFileSetRef" maxEntriesLocalHeap="10000" eternal="true"
+	<cache name="cn.wuxia.project.storage.core.model.UploadFileSetRef" maxEntriesLocalHeap="10000" eternal="true"
            overflowToDisk="false" />
-	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityPermission" maxEntriesLocalHeap="10000" eternal="true"
+	<cache name="cn.wuxia.project.security.core.entity.SecurityPermission" maxEntriesLocalHeap="10000" timeToIdleSeconds="300" timeToLiveSeconds="600"
            overflowToDisk="false" />
-	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityPermissionResourcesRef" maxEntriesLocalHeap="10000" eternal="true"
+	<cache name="cn.wuxia.project.security.core.entity.SecurityPermissionResourcesRef" maxEntriesLocalHeap="10000" timeToIdleSeconds="300" timeToLiveSeconds="600"
            overflowToDisk="false" />
-	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityResources" maxEntriesLocalHeap="10000" eternal="true"
+	<cache name="cn.wuxia.project.security.core.entity.SecurityResources" maxEntriesLocalHeap="10000" timeToIdleSeconds="300" timeToLiveSeconds="600"
            overflowToDisk="false" />
-	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityRole" maxEntriesLocalHeap="10000" eternal="true"
+	<cache name="cn.wuxia.project.security.core.entity.SecurityRole" maxEntriesLocalHeap="10000" timeToIdleSeconds="300" timeToLiveSeconds="600"
            overflowToDisk="false" />
-	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityRolePermissionRef" maxEntriesLocalHeap="10000" eternal="true"
+	<cache name="cn.wuxia.project.security.core.entity.SecurityRolePermissionRef" maxEntriesLocalHeap="10000" timeToIdleSeconds="300" timeToLiveSeconds="600"
            overflowToDisk="false" />
-	<cache name="cn.wuxia.project.basic.core.cas.entity.SecurityUserRoleRef" maxEntriesLocalHeap="10000" eternal="true"
+	<cache name="cn.wuxia.project.security.core.entity.SecurityUserRoleRef" maxEntriesLocalHeap="10000" timeToIdleSeconds="300" timeToLiveSeconds="600"
            overflowToDisk="false" />
 </ehcache>

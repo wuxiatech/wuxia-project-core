@@ -12,7 +12,6 @@ import cn.wuxia.tools.excel.ImportExcelUtil;
 import cn.wuxia.tools.excel.exception.ExcelException;
 import com.google.common.collect.Lists;
 import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -42,7 +41,7 @@ public class CurrencyServiceImpl extends CommonMongoServiceImpl<Currency, String
         List<ImportCurrencyBean> priceBeanList = Lists.newArrayList();
         try {
             priceBeanList = ImportExcelUtil.importExcel(inputStream, ImportCurrencyBean.class);
-        } catch (EncryptedDocumentException | InvalidFormatException | IOException e) {
+        } catch (EncryptedDocumentException  | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
