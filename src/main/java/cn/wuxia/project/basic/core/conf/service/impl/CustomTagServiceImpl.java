@@ -1,18 +1,16 @@
 /*
-* Created on :2016年6月17日
-* Author     :songlin
-* Change History
-* Version       Date         Author           Reason
-* <Ver.No>     <date>        <who modify>       <reason>
-* Copyright 2014-2020 www.ibmall.cn All right reserved.
-*/
+ * Created on :2016年6月17日
+ * Author     :songlin
+ * Change History
+ * Version       Date         Author           Reason
+ * <Ver.No>     <date>        <who modify>       <reason>
+ * Copyright 2014-2020 wuxia.tech All right reserved.
+ */
 package cn.wuxia.project.basic.core.conf.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import cn.wuxia.common.exception.AppDaoException;
+import cn.wuxia.common.exception.AppServiceException;
+import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.project.basic.core.conf.dao.CustomTagMongoDao;
 import cn.wuxia.project.basic.core.conf.entity.CustomTag;
 import cn.wuxia.project.basic.core.conf.entity.CustomTagCategory;
@@ -20,7 +18,10 @@ import cn.wuxia.project.basic.core.conf.service.CustomTagCategoryService;
 import cn.wuxia.project.basic.core.conf.service.CustomTagService;
 import cn.wuxia.project.common.dao.CommonMongoDao;
 import cn.wuxia.project.common.service.impl.CommonMongoServiceImpl;
-import cn.wuxia.common.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CustomTagServiceImpl extends CommonMongoServiceImpl<CustomTag, String> implements CustomTagService {
@@ -36,10 +37,18 @@ public class CustomTagServiceImpl extends CommonMongoServiceImpl<CustomTag, Stri
         if (StringUtil.isNotBlank(customTag.getCategoryId())) {
 
         } else {
-            CustomTagCategory customTagCategory = tagCategoryService.save(new CustomTagCategory(customTag.getCategoryName()));
-            customTag.setCategoryId(customTagCategory.getId());
+            try {
+                CustomTagCategory customTagCategory = tagCategoryService.save(new CustomTagCategory(customTag.getCategoryName()));
+                customTag.setCategoryId(customTagCategory.getId());
+            } catch (AppDaoException e) {
+                throw new AppServiceException("保存失败", e);
+            }
         }
-        return super.save(customTag);
+        try {
+            return super.save(customTag);
+        } catch (AppDaoException e) {
+            throw new AppServiceException("保存失败", e);
+        }
     }
 
     @Override

@@ -4,7 +4,7 @@
  * Change History
  * Version       Date         Author           Reason
  * <Ver.No>     <date>        <who modify>       <reason>
- * Copyright 2014-2020 www.ibmall.cn All right reserved.
+ * Copyright 2014-2020 wuxia.tech All right reserved.
  */
 package cn.wuxia.project.basic.core.user.service;
 

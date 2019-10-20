@@ -1,5 +1,7 @@
 package cn.wuxia.project.basic.support;
 
+import cn.wuxia.common.exception.AppDaoException;
+import cn.wuxia.common.exception.AppServiceException;
 import cn.wuxia.common.spring.SpringContextHolder;
 import cn.wuxia.project.basic.core.conf.entity.KeyPoint;
 import cn.wuxia.project.basic.core.conf.service.KeyPointService;
@@ -30,10 +32,18 @@ public class LogIt {
     public static void action(String pointKey) {
         if (getAsyncTaskManager() != null) {
             asyncTaskManager.getExecutor().execute(() -> {
-                keyPointService.save(new KeyPoint(pointKey));
+                try {
+                    keyPointService.save(new KeyPoint(pointKey));
+                } catch (AppDaoException e) {
+                    e.printStackTrace();
+                }
             });
         } else {
-            keyPointService.save(new KeyPoint(pointKey));
+            try {
+                keyPointService.save(new KeyPoint(pointKey));
+            } catch (AppDaoException e) {
+                throw new AppServiceException("保存失败", e);
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 package cn.wuxia.project.basic.core.conf.service.impl;
 
+import cn.wuxia.common.exception.AppDaoException;
+import cn.wuxia.common.exception.AppServiceException;
 import cn.wuxia.common.util.reflection.BeanUtil;
 import cn.wuxia.project.basic.core.conf.bean.ImportCurrencyBean;
 import cn.wuxia.project.basic.core.conf.dao.CurrencyMongoDao;
@@ -22,6 +24,7 @@ import java.util.List;
 
 /**
  * 货币汇率 Service Implement class.
+ *
  * @author LuoDengxiong
  * @since 2017-02-11
  */
@@ -41,16 +44,22 @@ public class CurrencyServiceImpl extends CommonMongoServiceImpl<Currency, String
         List<ImportCurrencyBean> priceBeanList = Lists.newArrayList();
         try {
             priceBeanList = ImportExcelUtil.importExcel(inputStream, ImportCurrencyBean.class);
-        } catch (EncryptedDocumentException  | IOException e) {
+        } catch (EncryptedDocumentException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         //获得excel表格的数据后存入数据库，
         // TODO: 需要判断是否有重复 or 取值时获取最新一条相同值的记录？
+        List<Currency> list = Lists.newArrayList();
         for (ImportCurrencyBean bean : priceBeanList) {
             Currency dto = new Currency();
             BeanUtil.copyProperties(dto, bean);
-            save(dto);
+            list.add(dto);
+        }
+        try {
+            batchSave(list);
+        } catch (AppDaoException e) {
+            throw new AppServiceException(e.getMessage());
         }
     }
 

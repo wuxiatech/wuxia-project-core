@@ -565,17 +565,17 @@ function utf16to8(str) {
     var out, i, len, c;
     out = "";
     len = str.length;
-    for(i = 0; i < len; i++) {
+    for (i = 0; i < len; i++) {
         c = str.charCodeAt(i);
         if ((c >= 0x0001) && (c <= 0x007F)) {
             out += str.charAt(i);
         } else if (c > 0x07FF) {
             out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
-            out += String.fromCharCode(0x80 | ((c >>  6) & 0x3F));
-            out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));
+            out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+            out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
         } else {
-            out += String.fromCharCode(0xC0 | ((c >>  6) & 0x1F));
-            out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));
+            out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+            out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
         }
     }
     return out;
@@ -617,30 +617,77 @@ if (typeof $ != 'undefined') {
         var properties = [];
         $.each(a, function () {
             if (this.name.indexOf(".") > 0) {
-                var name = this.name.substring(0, this.name.indexOf("["));
-                var inx = this.name.substring(this.name.indexOf("[") + 1, this.name.indexOf("]"));
-                var rname = this.name.substring(this.name.indexOf(".") + 1, this.name.length);
-                console.log(name + " " + inx + " " + rname);
-
                 /**
-                 * 如果已存在
+                 * 如果.在[ 后面， 如user[0].name
                  */
-                if (o[name]) {
-                    var p = o[name][inx] || {};
-                    p[rname] = this.value || '';
-                    o[name][inx] = p;
-
+                if (this.name.indexOf(".") > this.name.indexOf("]")) {
+                    /**
+                     * propertyName = user
+                     * 截取[部分字符串
+                     * @type {string}
+                     */
+                    var name = this.name.substring(0, this.name.indexOf("["));
+                    var inx = this.name.substring(this.name.indexOf("[") + 1, this.name.indexOf("]"));
+                    // if(this.name.endWith("]")){
+                    //     if(!o[name]){
+                    //         o[name] = [];
+                    //     }
+                    //     var p = this.value || '';
+                    //     o[name][inx] = p;
+                    // }else {
+                    var rname = this.name.substring(this.name.indexOf(".") + 1, this.name.length);
+                    console.log(name + " " + inx + " " + rname);
+                    /**
+                     * 如果已存在
+                     */
+                    if (o[name]) {
+                        var p = o[name][inx] || {};
+                        p[rname] = this.value || '';
+                        o[name][inx] = p;
+                    } else {
+                        /**
+                         * 如果不存在
+                         */
+                        o[name] = [];
+                        var p = {};
+                        p[rname] = this.value || '';
+                        o[name][inx] = p;
+                    }
+                    // }
                 } else {
                     /**
-                     * 如果不存在
+                     * 如果.在[ 前面， 如user.name[0]
                      */
-                    o[name] = [];
-                    var p = {};
-                    p[rname] = this.value || '';
-                    o[name][inx] = p;
+                    var name = this.name.substring(0, this.name.indexOf("."));
+                    var rname = this.name.substring(this.name.indexOf(".") + 1, this.name.indexOf("["));
+                    var inx = this.name.substring(this.name.indexOf("[") + 1, this.name.indexOf("]"));
+                    if (this.name.endWith("]")) {
+                        var p = o[name] || {};
+                        if (!p[rname]) {
+                            p[rname] = [];
+                        }
+                        p[rname][inx] = this.value || '';
+                        o[name] = p;
+                    } else {
+                        console.log(name + " " + inx + " " + rname);
+                        /**
+                         * 如果已存在
+                         */
+                        if (o[name]) {
+                            var p = o[name][inx] || {};
+                            p[rname] = this.value || '';
+                            o[name][inx] = p;
+                        } else {
+                            /**
+                             * 如果不存在
+                             */
+                            o[name] = [];
+                            var p = {};
+                            p[rname] = this.value || '';
+                            o[name][inx] = p;
+                        }
+                    }
                 }
-
-
                 // console.log(o[name]);
                 return true;
             }

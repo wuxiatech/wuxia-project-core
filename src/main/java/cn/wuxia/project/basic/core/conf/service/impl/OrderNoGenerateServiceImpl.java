@@ -1,13 +1,14 @@
 /*
-* Created on :2016年6月17日
-* Author     :songlin
-* Change History
-* Version       Date         Author           Reason
-* <Ver.No>     <date>        <who modify>       <reason>
-* Copyright 2014-2020 www.ibmall.cn All right reserved.
-*/
+ * Created on :2016年6月17日
+ * Author     :songlin
+ * Change History
+ * Version       Date         Author           Reason
+ * <Ver.No>     <date>        <who modify>       <reason>
+ * Copyright 2014-2020 wuxia.tech All right reserved.
+ */
 package cn.wuxia.project.basic.core.conf.service.impl;
 
+import cn.wuxia.common.exception.ValidateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -38,7 +39,11 @@ public class OrderNoGenerateServiceImpl extends CommonMongoServiceImpl<OrderNoGe
         OrderNoGenerate orderNoGenerate = orderNoGenerateMongoDao.findByCode(code);
         if (orderNoGenerate == null) {
             orderNoGenerate = new OrderNoGenerate(code, start, step);
-            orderNoGenerateMongoDao.save(orderNoGenerate);
+            try {
+                orderNoGenerateMongoDao.save(orderNoGenerate);
+            } catch (ValidateException e) {
+                throw new AppServiceException(e.getMessage());
+            }
         }
         return orderNoGenerate.getNextno();
     }

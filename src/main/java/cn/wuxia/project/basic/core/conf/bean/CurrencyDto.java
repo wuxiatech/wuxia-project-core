@@ -1,15 +1,20 @@
 package cn.wuxia.project.basic.core.conf.bean;
 
+import cn.wuxia.project.common.bean.CommonDto;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import cn.wuxia.project.common.bean.CommonDto;
-
-import javax.validation.constraints.NotNull;
-
-
+/**
+ * @author songlin
+ */
+@Getter
+@Setter
 public class CurrencyDto extends CommonDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -28,69 +33,7 @@ public class CurrencyDto extends CommonDto implements Serializable {
 	private Date validFrom; // 有效期起 - 可为空	
 	private Integer status; // 状态 - 可为空	
 
-	
-	public String getId(){
-		return id;
-	}
-	public void setId(String id){
-		this.id = id;
-	}
 
-	
-	public String getCurrencyName(){
-		return currencyName;
-	}
-	public void setCurrencyName(String currencyName){
-		this.currencyName = currencyName;
-	}
-
-	
-	public String getCurrencyCode(){
-		return currencyCode;
-	}
-	public void setCurrencyCode(String currencyCode){
-		this.currencyCode = currencyCode;
-	}
-
-	
-	public String getCurrencySign(){
-		return currencySign;
-	}
-	public void setCurrencySign(String currencySign){
-		this.currencySign = currencySign;
-	}
-
-	
-	public Double getExchangeRateFromRmb(){
-		return exchangeRateFromRmb;
-	}
-	public void setExchangeRateFromRmb(Double exchangeRateFromRmb){
-		this.exchangeRateFromRmb = exchangeRateFromRmb;
-	}
-
-	
-	public Double getExchangeRateToRmb(){
-		return exchangeRateToRmb;
-	}
-	public void setExchangeRateToRmb(Double exchangeRateToRmb){
-		this.exchangeRateToRmb = exchangeRateToRmb;
-	}
-
-	
-	public Date getValidFrom(){
-		return validFrom;
-	}
-	public void setValidFrom(Date validFrom){
-		this.validFrom = validFrom;
-	}
-
-	
-	public Integer getStatus(){
-		return status;
-	}
-	public void setStatus(Integer status){
-		this.status = status;
-	}
 
 
 
