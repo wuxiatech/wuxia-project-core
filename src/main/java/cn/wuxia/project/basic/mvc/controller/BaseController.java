@@ -1,10 +1,7 @@
 package cn.wuxia.project.basic.mvc.controller;
 
 import cn.wuxia.common.exception.AppPermissionException;
-import cn.wuxia.common.util.BrowserUtils;
-import cn.wuxia.common.util.DateUtil;
-import cn.wuxia.common.util.ResourceBundleUtil;
-import cn.wuxia.common.util.StringUtil;
+import cn.wuxia.common.util.*;
 import cn.wuxia.project.basic.core.conf.support.DTools;
 import cn.wuxia.project.basic.support.ApplicationPropertiesUtil;
 import cn.wuxia.project.basic.support.DConstants;
@@ -67,7 +64,7 @@ public abstract class BaseController {
          * (StringUtil.isBlank(ip) || StringUtil.equals(ip, "127.0.0.1") ||
          * StringUtil.equals(ip, "0:0:0:0:0:0:0:1")) {
          */
-        String ip = request.getRemoteAddr();
+        String ip = ServletUtils.getRemoteIP(request);
         // }
         logger.info("************Current visitor ip:" + ip);
         return ip;

@@ -8,19 +8,18 @@
  */
 package cn.wuxia.project.basic.core.conf.service.impl;
 
-import cn.wuxia.common.exception.ValidateException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Service;
-
+import cn.wuxia.common.exception.AppDaoException;
+import cn.wuxia.common.exception.AppServiceException;
 import cn.wuxia.project.basic.core.conf.dao.OrderNoGenerateMongoDao;
 import cn.wuxia.project.basic.core.conf.entity.OrderNoGenerate;
 import cn.wuxia.project.basic.core.conf.service.OrderNoGenerateService;
 import cn.wuxia.project.common.dao.CommonMongoDao;
 import cn.wuxia.project.common.service.impl.CommonMongoServiceImpl;
-import cn.wuxia.common.exception.AppServiceException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Service;
 
 @Service
 public class OrderNoGenerateServiceImpl extends CommonMongoServiceImpl<OrderNoGenerate, String> implements OrderNoGenerateService {
@@ -40,8 +39,8 @@ public class OrderNoGenerateServiceImpl extends CommonMongoServiceImpl<OrderNoGe
         if (orderNoGenerate == null) {
             orderNoGenerate = new OrderNoGenerate(code, start, step);
             try {
-                orderNoGenerateMongoDao.save(orderNoGenerate);
-            } catch (ValidateException e) {
+                save(orderNoGenerate);
+            } catch (AppDaoException e) {
                 throw new AppServiceException(e.getMessage());
             }
         }

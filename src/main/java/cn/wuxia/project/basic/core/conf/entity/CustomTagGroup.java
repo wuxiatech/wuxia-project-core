@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import cn.wuxia.project.basic.core.conf.bean.TagGroupCategory;

@@ -1,6 +1,6 @@
 package cn.wuxia.project.basic.core.conf.bean;
 
-import cn.wuxia.common.entity.ValidationEntity;
+import cn.wuxia.common.validator.ValidationEntity;
 import cn.wuxia.tools.excel.annotation.ExcelColumn;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
