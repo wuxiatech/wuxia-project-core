@@ -10,27 +10,52 @@ import cn.wuxia.common.util.PropertiesUtils;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.project.basic.core.conf.support.DTools;
 import jodd.props.Props;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.util.Properties;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Get Properties Util Tools
  *
  * @author songlin.li
  */
+@Slf4j
 public class ApplicationPropertiesUtil {
 
 
     // =========================开始静态获取properties的值，修改的properties重启后生效或者clean后生效=====================
 
-    private static final String[] propertiesPaths = {};
-    private static Properties initProperties = PropertiesUtils.loadProperties(new String[]{"classpath:properties/application.properties", "classpath:application.properties"});
+    private static final String[] propertiesPaths = new String[]{"classpath:properties/application.properties", "classpath:application.properties"};
+    private static Properties initProperties;
 
     private static Props props = new Props();
 
     static {
-        System.out.println(initProperties.getProperty("dmyy"));
+        log.info("初始化ApplicationPropertiesUtil");
+        load(propertiesPaths);
+        /**
+         * 执行一个定时器，5分钟执行一次
+         */
+        dynamicLoad(propertiesPaths);
+    }
+
+    private static void load(String[] propertiesPaths) {
+        initProperties = PropertiesUtils.loadProperties(propertiesPaths);
         props.load(initProperties);
+    }
+    /**
+     * 执行一个定时器，5分钟执行一次
+     */
+    private static void dynamicLoad(String[] propertiesPaths) {
+        ScheduledExecutorService mService = new ScheduledThreadPoolExecutor(1,
+                new BasicThreadFactory.Builder().namingPattern("app-prop-scheduler-pool-%d").daemon(true).build());
+        mService.scheduleAtFixedRate(() -> {
+            load(propertiesPaths);
+        }, 60, 300, TimeUnit.SECONDS);
     }
 
     /**
@@ -67,8 +92,9 @@ public class ApplicationPropertiesUtil {
                     }
                 }
                 return value;
-            } else
+            } else {
                 return DTools.dic(key);
+            }
         } catch (Exception e) {
             System.out.println("error:" + e.getMessage());
         }
@@ -88,8 +114,9 @@ public class ApplicationPropertiesUtil {
         if (getProperties().containsKey(key)) {
             String value = props.getValue(key, profiles);
             return value;
-        } else
+        } else {
             return DTools.dic(key);
+        }
     }
 
     // =========================结束静态获取properties的值，修改的properties重启后生效或者clean后生效=====================

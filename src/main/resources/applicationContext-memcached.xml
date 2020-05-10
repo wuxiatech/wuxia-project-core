@@ -48,7 +48,6 @@
         <property name="consistentHashing" value="true" /> </bean> </property> </bean> -->
 
 
-    <cache:annotation-driven cache-manager="cacheManager"/>
 
     <!-- spring自己的换管理器，这里定义了缓存位置名称 ，既注解中的value -->
     <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
