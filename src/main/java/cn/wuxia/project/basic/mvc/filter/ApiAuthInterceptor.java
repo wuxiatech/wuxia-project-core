@@ -299,4 +299,20 @@ public class ApiAuthInterceptor implements HandlerInterceptor {
         }
     }
 
+
+    public EnhancementAuthLoginService getEnhancementAuthLoginService() {
+        return enhancementAuthLoginService;
+    }
+
+    public void setEnhancementAuthLoginService(EnhancementAuthLoginService enhancementAuthLoginService) {
+        this.enhancementAuthLoginService = enhancementAuthLoginService;
+    }
+
+    public void setCustomAuthHandler(CustomAuthHandler customAuthHandler) {
+        this.customAuthHandler = customAuthHandler;
+    }
+
+    public void setWeixinAuthHandler(WeixinAuthHandler weixinAuthHandler) {
+        this.weixinAuthHandler = weixinAuthHandler;
+    }
 }

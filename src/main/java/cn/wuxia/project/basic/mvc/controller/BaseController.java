@@ -3,7 +3,6 @@ package cn.wuxia.project.basic.mvc.controller;
 import cn.wuxia.common.exception.AppPermissionException;
 import cn.wuxia.common.util.*;
 import cn.wuxia.project.basic.core.conf.support.DTools;
-import cn.wuxia.project.basic.support.ApplicationPropertiesUtil;
 import cn.wuxia.project.basic.support.DConstants;
 import cn.wuxia.project.common.security.UserContext;
 import cn.wuxia.project.common.security.UserContextUtil;
@@ -34,8 +33,8 @@ public abstract class BaseController {
     /**
      * 需要在applicationContext-mvc.xml中引入properties才能在controller中使用@Value
      */
-    //    @Value("${system.type}")
-    protected String system = ApplicationPropertiesUtil.getPropertiesValue("system.type");
+    //@Value("${system.type}")
+    protected String system = PropertiesUtils.loadProperties("classpath:application.properties").getProperty("system.type");
 
     /**
      * get Server HttpPath
