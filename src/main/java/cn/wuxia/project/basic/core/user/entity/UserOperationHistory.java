@@ -1,6 +1,6 @@
 package cn.wuxia.project.basic.core.user.entity;
 
-import cn.wuxia.project.common.model.ModifyInfoEntity;
+import cn.wuxia.project.common.model.BaseUuidEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +14,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "u_user_operation_history")
-public class UserOperationHistory extends ModifyInfoEntity implements Serializable {
+public class UserOperationHistory extends BaseUuidEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Timestamp operationDatetime;
