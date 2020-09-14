@@ -31,7 +31,7 @@ public class LogIt {
 
     public static void action(String pointKey) {
         if (getAsyncTaskManager() != null) {
-            asyncTaskManager.getExecutor().execute(() -> {
+            asyncTaskManager.getSingleExecutor().execute(() -> {
                 try {
                     keyPointService.save(new KeyPoint(pointKey));
                 } catch (AppDaoException e) {
